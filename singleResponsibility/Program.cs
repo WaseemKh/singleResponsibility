@@ -2,7 +2,7 @@
 
 
 
-public class Product
+public class Product<T>
 {
     public int ProductId { get; set; }
     public string ProductName { get; set; }
@@ -10,50 +10,47 @@ public class Product
     public string storeId { get; set; }
     public Store Store { get; set; }
 
-    public void Save()
+    EFRepository<T> _EFRepository = new EFRepository<T>();
+    public void Save(T data)
     {
         Console.WriteLine("Starting Save()");
-        //use EF to save Inventory to DB
-
+        _EFRepository.AddAsync(data);
         Console.WriteLine("End Save()");
     }
 
-    public void Delete()
+    public async Task  Delete(T id )
     {
         Console.WriteLine("Starting Delete()");
-
         //check if already  Used -processed- Product  Inventory then don't delete
-
+      await  _EFRepository.DeleteAsync(id);
         Console.WriteLine("End Delete()");
     }
 
-    public IList<Store> Sale(Store st)
+
+}
+
+
+
+//Class for every DB operations -using EF 
+
+public class EFRepository<T>
+{
+    public async Task<T> AddAsync(T entity)
     {
-        Console.WriteLine("Starting Subscribe()");
-        var result = new List<Store>();
-        //apply business rules based on the store type 
-        if (st.Type == "online")
-        {
-            //validate
-            return result;
-        }
-        else if (st.Type == "realy")
-        {
-            return result;
-        }
-        return result;
-
-
-        Console.WriteLine("End Subscribe()");
+        //_db.Set<T>().Add(entity);
+        // await _db.SaveChangesAsync();
+        return entity;
     }
-
-    public void SendEmailToCustomer()
+    public async Task DeleteAsync(T entity)
     {
-        Console.WriteLine("Done !");
-        //Setting for email and send 
+        // _db.Set<T>().Remove(entity);
+        //   await _db.SaveChangesAsync();
     }
-
-    //edite product quntity in store ....
+    public async Task<IReadOnlyList<T>> ListAllAsync()
+    {
+        // return    await _db.Set<T>().ToListAsync();
+        return new List<T>();
+    }
 }
 public class Store
 {
@@ -61,5 +58,17 @@ public class Store
     public string StoreName { get; set; }
     public string Location { get; set; }
     public string Type { get; set; }
+
+
+public void AddToStore(Store st)
+    {
+        if(st.Type == "Online")
+        {
+            //add using EF add on online table
+        }else
+        {
+            //add using EF add on reality table
+        }
+    }
 
 }
