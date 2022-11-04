@@ -1,7 +1,5 @@
-﻿
-
-
-
+﻿Product<int> x =new Product<int>();
+x.Save(1);
 public class Product<T>
 {
     public int ProductId { get; set; }
@@ -14,17 +12,17 @@ public class Product<T>
     
     public void Save(T data)
     {
-        Logging.Log("Starting Save()");
+        Logging.Log("Starting Save");
         _EFRepository.AddAsync(data);
-        Logging.Log("End Save()");
+        Logging.Log("End Save");
     }
 
     public async Task Delete(T id)
     {
-        Logging.Log("Starting Delete()");
+        Logging.Log("Starting Delete");
         //check if already  Used -processed- Product  Inventory then don't delete
         await _EFRepository.DeleteAsync(id);
-        Logging.Log("End Delete()");
+        Logging.Log("End Delete");
     }
 
 
@@ -81,7 +79,7 @@ public class Logging
     public static void Log(string log)
 
     {
-        Console.WriteLine(
-        "{ 0},{ 1} ,Save Logs in any where ,", log);
+        Console.WriteLine("Save Logs in any where,{0}",
+        log);
     }
 }
