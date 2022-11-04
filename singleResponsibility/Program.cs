@@ -11,19 +11,20 @@ public class Product<T>
     public Store Store { get; set; }
 
     EFRepository<T> _EFRepository = new EFRepository<T>();
+    
     public void Save(T data)
     {
-        Console.WriteLine("Starting Save()");
+        Logging.Log("Starting Save()");
         _EFRepository.AddAsync(data);
-        Console.WriteLine("End Save()");
+        Logging.Log("End Save()");
     }
 
-    public async Task  Delete(T id )
+    public async Task Delete(T id)
     {
-        Console.WriteLine("Starting Delete()");
+        Logging.Log("Starting Delete()");
         //check if already  Used -processed- Product  Inventory then don't delete
-      await  _EFRepository.DeleteAsync(id);
-        Console.WriteLine("End Delete()");
+        await _EFRepository.DeleteAsync(id);
+        Logging.Log("End Delete()");
     }
 
 
@@ -60,15 +61,27 @@ public class Store
     public string Type { get; set; }
 
 
-public void AddToStore(Store st)
+    public void AddToStore(Store st)
     {
-        if(st.Type == "Online")
+        if (st.Type == "Online")
         {
             //add using EF add on online table
-        }else
+        }
+        else
         {
             //add using EF add on reality table
         }
     }
 
+}
+
+
+public class Logging
+{
+    public static void Log(string log)
+
+    {
+        Console.WriteLine(
+        "{ 0},{ 1} ,Save Logs in any where ,", log);
+    }
 }
